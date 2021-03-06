@@ -1,13 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-03-01 16:29:32
- * @LastEditTime: 2021-03-02 15:25:44
+ * @LastEditTime: 2021-03-05 21:17:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \koa-learn\routes\class.js
  */
 const router = require('koa-router')()
 const Class = require('../dbs/models/class')
+
 
 router.prefix('/class')
 
@@ -34,5 +35,6 @@ router.post('/addClass', async function (ctx) {
     code: code
   }
 })
+
 
 module.exports = router
