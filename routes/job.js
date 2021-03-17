@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-03 23:21:31
- * @LastEditTime: 2021-03-03 23:53:57
+ * @LastEditTime: 2021-03-17 11:36:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \classAssistingServer\routes\job.js
@@ -9,6 +9,7 @@
 
 const router = require('koa-router')()
 const Job = require('../dbs/models/job')
+const {uploadImg, uploadFile} = require('../libs/upload')
 
 router.prefix('/job')
 
@@ -38,6 +39,9 @@ router.post('/addJob', async function (ctx) {
     code: code
   }
 })
+
+router.post('/uploadImg', uploadImg)
+router.post('/uploadFile', uploadFile)
 
 module.exports = router
 
