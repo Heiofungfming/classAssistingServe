@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-02-23 20:21:05
- * @LastEditTime: 2021-03-03 23:29:42
+ * @LastEditTime: 2021-03-17 13:42:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \koa-learn\app.js
@@ -13,7 +13,15 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const koaBody = require('koa-body')
 
+app.use(koaBody({
+  multipart: true, // 允许上传多个文件
+  formidable: {
+    maxFieldsSize: 200 * 1024 * 1024,
+    keepExtensions: true
+  }
+}))
 // 引入mongoose
 const mongoose = require('mongoose')
 const dbConfig = require('./dbs/config')
@@ -37,6 +45,7 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
+
 app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
@@ -58,6 +67,7 @@ app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(myClass.routes(), myClass.allowedMethods())
 app.use(job.routes(), myClass.allowedMethods())
+
 
 // 配置mongoose数据库
 mongoose.connect(dbConfig.dbs, {
