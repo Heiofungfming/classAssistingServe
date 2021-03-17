@@ -1,10 +1,10 @@
 /*
  * @Author: your name
- * @Date: 2021-03-17 11:26:24
- * @LastEditTime: 2021-03-17 13:49:42
+ * @Date: 2021-03-05 19:34:00
+ * @LastEditTime: 2021-03-06 14:42:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \classAssistingServe\libs\upload.js
+ * @FilePath: \classAssistingServer\libs\upload.js
  */
 /* 
     文件上传 
@@ -12,9 +12,8 @@
 const fs = require('fs');
 const path = require('path');
 const dateFormat = require('../utils/dateFormat.js')
-
 const upload= {
-    BASEURL: 'Heoifungming/classAssistingServer02/classAssistingServe/',
+    BASEURL: 'Heoifungming/classAssistingServer/',
     UPLOAD: '/upload',
     IMAGE: '/image/',
     FILE: '/file/',
@@ -23,7 +22,6 @@ const upload= {
 // 创建文件目录
 const mkdirFile = (path) => {
     path = upload.BASEURL + path
-    console.log(path)
     let pathList = path.split('/');
     let fileDir = ''
     pathList.forEach(i => {
