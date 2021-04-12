@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-03 23:05:56
- * @LastEditTime: 2021-03-03 23:16:48
+ * @LastEditTime: 2021-03-29 21:12:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \classAssistingServer\dbs\models\job.js
@@ -15,8 +15,9 @@ let jobSchema = new mongoose.Schema({
   detail: String,
   remark: String,
   endTime: String,
-  image: String,
-  doc: String,
+  image: [],
+  doc: [],
+  isDone: Boolean,
   isRemind: Boolean,
   isCollect: Boolean
 })

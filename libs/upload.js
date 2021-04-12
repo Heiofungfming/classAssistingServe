@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-17 11:26:24
- * @LastEditTime: 2021-03-17 13:49:42
+ * @LastEditTime: 2021-04-12 11:54:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \classAssistingServe\libs\upload.js
@@ -14,12 +14,15 @@ const path = require('path');
 const dateFormat = require('../utils/dateFormat.js')
 
 const upload= {
-    BASEURL: 'Heoifungming/classAssistingServer02/classAssistingServe/',
+    BASEURL: '/Heoifungming/classAssistingServer02/classAssistingServe/public',
     UPLOAD: '/upload',
     IMAGE: '/image/',
     FILE: '/file/',
     MAXFILESIZE: 200 * 1024 * 1024, //上传文件大小
     }
+
+const reqURL = 'http://localhost:3000'
+
 // 创建文件目录
 const mkdirFile = (path) => {
     path = upload.BASEURL + path
@@ -63,18 +66,19 @@ const uploadImg = async ctx => {
     var time = Date.parse(new Date())
     let date = dateFormat.dateFormat(time, 'yyyyMMddhhmmss');
     let file = ctx.request.files.file;
-    let fileName = 'public'+ upload.UPLOAD + upload.IMAGE //上传保存目录
+    let fileName = upload.UPLOAD + upload.IMAGE //上传保存目录
     let fileYear = date.substring(4, 8) + '/' +
         date.substring(8, 10);
     let tail = file.name == 'blob' ? 'png' : file.name.split('.').pop()
-    let filePath = path.join(fileName, fileYear, date + '.' + tail); //根据时间拼接好文件名称
+    let filePath = path.join(upload.BASEURL, fileName, fileYear, date + '.' + tail); //根据时间拼接好文件名称
     await mkdirFile(fileName + fileYear)         //创建文件目录
     await saveFile(file.path, filePath).then(su => {
-        let uplaod_img = su.substring(upload.UPLOAD.length, su.length)
+        let len = upload.BASEURL.length
+        let uplaod_img = reqURL + su.substring(len, su.length).replace(/\\/g, '/')
         ctx.body = {
             error_code: 10000,
             error_message: '上传文件成功',
-            realName: uplaod_img,
+            realPath: uplaod_img,
         }
     }).catch(err => {
         ctx.body = {
@@ -88,18 +92,19 @@ const uploadFile = async ctx => {
     var time = Date.parse(new Date())
     let date = dateFormat.dateFormat(time, 'yyyyMMddhhmmss');
     let file = ctx.request.files.file;
-    let fileName = 'public'+ upload.UPLOAD + upload.FILE //上传保存目录
+    let fileName = upload.UPLOAD + upload.FILE //上传保存目录
     let fileYear = date.substring(4, 8) + '/' +
         date.substring(8, 10);
     let tail = file.name == 'blob' ? 'png' : file.name.split('.').pop()
-    let filePath = path.join(fileName, fileYear, date + '.' + tail); //根据时间拼接好文件名称
+    let filePath = path.join(upload.BASEURL, fileName, fileYear, date + '.' + tail); //根据时间拼接好文件名称
     await mkdirFile(fileName + fileYear)         //创建文件目录
     await saveFile(file.path, filePath).then(su => {
-        let uplaod_img = su.substring(upload.UPLOAD.length, su.length)
+        let len = upload.BASEURL.length
+        let uplaod_img = su.substring(len, su.length)
         ctx.body = {
             error_code: 10000,
             error_message: '上传文件成功',
-            realName: uplaod_img,
+            realPath: uplaod_img,
         }
     }).catch(err => {
         ctx.body = {
@@ -109,7 +114,35 @@ const uploadFile = async ctx => {
     })
 }
 
+const deleteFile = async ctx => {
+    let delPath = ctx.request.body.delPath.url
+    let len = reqURL.length
+    delPath = delPath.substring(len, delPath.length)
+    delPath = path.join(upload.BASEURL, delPath)
+    try {
+        if (fs.existsSync(delPath)) {
+            fs.unlinkSync(delPath)
+            ctx.body = {
+                error_code: 10000,
+                error_message: '删除文件成功！',
+            }
+        } else {
+            ctx.body = {
+                error_code: 20008,
+                error_message: '给定路径不存在！',
+            }
+            console.log('给定路径不存在')
+        }
+    } catch (err) {
+        ctx.body = {
+            error_code: 20008,
+            error_message: '删除文件失败！',
+        }
+    }
+}
+
 module.exports = {
     uploadImg,
-    uploadFile
+    uploadFile,
+    deleteFile
 };

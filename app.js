@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-02-23 20:21:05
- * @LastEditTime: 2021-03-17 13:42:29
+ * @LastEditTime: 2021-04-06 18:15:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \koa-learn\app.js
@@ -30,6 +30,8 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const myClass = require('./routes/class')
 const job = require('./routes/job')
+const classJob = require('./routes/classJob')
+const remind = require('./routes/remind')
 
 // 解决跨域CORS
 const cors = require('./libs/koa-cors')
@@ -67,7 +69,8 @@ app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(myClass.routes(), myClass.allowedMethods())
 app.use(job.routes(), myClass.allowedMethods())
-
+app.use(classJob.routes(), myClass.allowedMethods())
+app.use(remind.routes(), myClass.allowedMethods())
 
 // 配置mongoose数据库
 mongoose.connect(dbConfig.dbs, {
